@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.loginImage {
+    height: 400px;
+    width: auto;
+}
+
+/* ul li {
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background-color: #4d47c3;
+    padding: 10px;
+    border-radius: 10px;
+    
+} */
