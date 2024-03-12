@@ -1,30 +1,44 @@
 // import {Colors} from "/assets/img"
-import Login from "./login"
-import Register from "./register";
-import { logo } from "/assets/img";
-
+import { useEffect, useState } from "react";
+import { Route, Routes, useNavigate } from "react-router";
+import Dashboard from "./layout/private/dashboard";
+import RouteNotFound from "./layout/public/404";
+import PublicLayout from "./layout/public/publicLayout";
 
 function App() {
+  const navigate = useNavigate();
+
+  //control this tate the useContext
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("login-token");
+    if (token) {
+      setLoggedIn(true);
+      navigate("/dashboard");
+    } else {
+      setLoggedIn(false);
+      navigate("/login");
+    }
+  }, []);
 
   return (
+    <Routes>
+      {loggedIn ? (
+        <>
+          <Route exact path="/dashboard" Component={Dashboard} />
+          <Route exact path="/about" Component={Dashboard} />
+        </>
+      ) : (
+        <>
+          <Route path="/login" Component={PublicLayout} />
+          <Route path="/register" Component={PublicLayout} />
+        </>
+      )}
 
-    <div className="h-screen">
-
-      <header className="pt-8">
-        <div className="flex justify-between mx-40 ">
-          <img src={logo} alt="logo" />
-          <div className="flex flex-row justify-between">
-            <ul className="flex items-center font-semibold gap-2 text-black">
-              <li className="hover:text-violet-700">Sign In</li>
-              <li className="hover:text-violet-700">Sign Up</li>
-            </ul>
-          </div>
-        </div>
-      </header>
-      <Login />
-      <Register />
-    </div>
-  )
+      <Route path="*" Component={RouteNotFound} />
+    </Routes>
+  );
 }
 
-export default App
+export default App;
