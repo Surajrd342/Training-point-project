@@ -3,6 +3,9 @@ import { object, string } from "yup";
 import { apple, facebook, google, loginImage } from "../../assets/img";
 import axios from "axios";
 import { useNavigate, useRoutes } from "react-router";
+import { useContext, useState } from "react";
+import { LoginContext } from "../../appMain";
+import { toast } from 'react-toastify';
 
 const initialValues = {
   username: "",
@@ -15,15 +18,17 @@ const validationSchema = object({
 });
 
 function Login() {
+  const loginContext = useContext(LoginContext);
+
+  const [loader, setLoader] = useState(false);
 
   const navigate = useNavigate();
-
 
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: validationSchema,
     onSubmit: async (values, resetForm) => {
-      resetForm.resetForm();
+      setLoader(true);
       console.log(values);
 
       const requestData = {
@@ -38,11 +43,16 @@ function Login() {
         );
 
         if (response?.data?.token) {
-          localStorage.setItem('login-token', response?.data?.token)
-          navigate("/dashboard")
+          resetForm.resetForm();
+          loginContext?.setLoggedIn(true);
+          toast.success("Logged in successfully")
+          localStorage.setItem("login-token", response?.data?.token);
+          navigate("/dashboard");
         }
+        setLoader(false);
       } catch (error) {
-        alert("Invalid username or password");
+        toast.error("Invalid username or password")
+        setLoader(false);
       }
     },
   });
@@ -126,7 +136,7 @@ function Login() {
                   className="bg-[#4d47c3] hover:bg-[#423da3] text-white p-3 mb-4 w-full font-semibold rounded shadow-lg shadow-indigo-500/50"
                   type="submit"
                 >
-                  Login
+                  {loader ? "Loading..." : "Login"}
                 </button>
               </div>
 

@@ -16,7 +16,7 @@ function PublicLayout() {
           </div>
         </div>
       </header>
-      <Login />
+      <Login  />
     </div>
   );
 }

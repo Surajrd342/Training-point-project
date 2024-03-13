@@ -2,10 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+/* @import "~react-image-gallery/styles/css/image-gallery.css"; */
+
 .loginImage {
     height: 400px;
     width: auto;
 }
+
 
 /* ul li {
     font-size: 18px;

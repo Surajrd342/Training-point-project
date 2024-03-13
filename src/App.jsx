@@ -1,30 +1,17 @@
 // import {Colors} from "/assets/img"
-import { useEffect, useState } from "react";
-import { Route, Routes, useNavigate } from "react-router";
+import { Route, Routes } from "react-router";
 import Dashboard from "./layout/private/dashboard";
 import RouteNotFound from "./layout/public/404";
 import PublicLayout from "./layout/public/publicLayout";
+import { useContext } from "react";
+import { LoginContext } from "./appMain";
 
 function App() {
-  const navigate = useNavigate();
-
-  //control this tate the useContext
-  const [loggedIn, setLoggedIn] = useState(false);
-
-  useEffect(() => {
-    const token = localStorage.getItem("login-token");
-    if (token) {
-      setLoggedIn(true);
-      navigate("/dashboard");
-    } else {
-      setLoggedIn(false);
-      navigate("/login");
-    }
-  }, []);
+  const loginContext = useContext(LoginContext);
 
   return (
     <Routes>
-      {loggedIn ? (
+      {loginContext?.loggedIn ? (
         <>
           <Route exact path="/dashboard" Component={Dashboard} />
           <Route exact path="/about" Component={Dashboard} />
